@@ -5,4 +5,4 @@
 - 一旦执行栈中所有的同步任务执行完毕，就去读取异步任务队列，进入执行栈执行。
 
 不断重复以上操作
-![eventlopp](../asset/eventloop.png)
+![eventlopp](../../asset/eventloop.png)

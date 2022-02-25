@@ -88,3 +88,84 @@ Function.prototype._apply = function (context = window, args) {
 
 # bind
 `bind()`方法会返回一个新的函数。当这个新的函数被调用时，`bind()`的第一个参数将会作为它运行时的`this`，之后的一系列参数将会在传递的实参前传入作为它的参数。
+
+由此看出`bind`的两个特点：
+- 返回一个函数
+- 可以传入参数
+
+举个栗子
+
+```js
+var foo = {
+    value: 1
+}
+
+function bar(){
+    console.log(this.value);
+}
+
+var bindFoo = bar.bind(foo);
+
+console.log(bindFoo); 
+/*
+ƒ bar(){
+    console.log(this.value);
+}
+*/
+
+bindFoo(); // 1
+```
+
+## 模拟实现bind
+
+```js
+// 第一版
+Function.prototype.bind2 = function (context) {
+    var self = this;
+    return function () {
+        return self.apply(context);
+    }
+
+}
+```
+
+### 传递参数
+因为bind不仅可以在`bind()`的时候传递参数，在执行返回的函数时，也以可传递参数
+
+栗如：
+```js
+var foo = {
+    value: 1
+};
+
+function bar(name, age) {
+    console.log(this.value);
+    console.log(name);
+    console.log(age);
+
+}
+
+var bindFoo = bar.bind(foo, 'daisy');
+bindFoo('18');
+// 1
+// daisy
+// 18
+```
+
+所以用`arguments`来处理
+```js
+// 第二版
+Function.prototype.bind2 = function (context) {
+
+    var self = this;
+    // 获取bind2函数从第二个参数到最后一个参数
+    var args = Array.prototype.slice.call(arguments, 1);
+
+    return function () {
+        // 这个时候的arguments是指bind返回的函数传入的参数
+        var bindArgs = Array.prototype.slice.call(arguments);
+        return self.apply(context, args.concat(bindArgs));
+    }
+
+}
+```
