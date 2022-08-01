@@ -10,11 +10,22 @@ obj instanceof Object //true
 ## 实现
 
 ```js
-function muInstanceof(target, origin) {
+function myInstanceof(target, origin) {
     const proto = target.__proto__;
     if (proto) {
         if (origin.prototype === proto) return true;
-        else return muInstanceof(proto, origin)
+        else return myInstanceof(proto, origin)
     } else return false
+}
+```
+
+```js
+const myInstanceOf = (target, origin) => {
+  let p = target;
+  while(p){
+    if(p === origin.prototype) return true;
+    p = p.__proto__;
+  };
+  return false;
 }
 ```
